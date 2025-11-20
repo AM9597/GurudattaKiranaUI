@@ -1,0 +1,77 @@
+<div class="p-4">
+
+  <h2 class="text-2xl font-bold mb-4">Admin | Manage Products</h2>
+
+  <!-- Product Form -->
+  <div class="bg-white p-4 rounded shadow-md mb-6">
+
+    <h3 class="text-xl font-semibold mb-3">
+      {{ isEditing ? 'Edit Product' : 'Add New Product' }}
+    </h3>
+
+    <div class="grid grid-cols-1 gap-3">
+
+      <input [(ngModel)]="productForm.productName" placeholder="Product Name"
+             class="border p-2 rounded" />
+
+      <input [(ngModel)]="productForm.price" type="number" placeholder="Price"
+             class="border p-2 rounded" />
+
+      <input [(ngModel)]="productForm.categoryID" placeholder="Category ID"
+             class="border p-2 rounded" />
+
+      <input [(ngModel)]="productForm.imageUrl" placeholder="Image URL"
+             class="border p-2 rounded" />
+
+      <textarea [(ngModel)]="productForm.description" placeholder="Description"
+                class="border p-2 rounded"></textarea>
+
+      <label class="flex items-center gap-2">
+        <input type="checkbox" [(ngModel)]="productForm.isAvailable" />
+        Available
+      </label>
+
+      <button class="bg-blue-600 text-white px-4 py-2 rounded"
+              (click)="saveProduct()">
+        {{ isEditing ? 'Update' : 'Add' }}
+      </button>
+
+      <button *ngIf="isEditing" class="bg-gray-500 text-white px-4 py-2 rounded"
+              (click)="resetForm()">
+        Cancel Edit
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Product List -->
+  <div>
+    <h3 class="text-xl font-semibold mb-3">All Products</h3>
+
+    <table class="w-full border">
+      <tr class="bg-gray-100">
+        <th class="p-2 border">Name</th>
+        <th class="p-2 border">Price</th>
+        <th class="p-2 border">Image</th>
+        <th class="p-2 border">Actions</th>
+      </tr>
+
+      <tr *ngFor="let p of products">
+        <td class="p-2 border">{{ p.productName }}</td>
+        <td class="p-2 border">₹{{ p.price }}</td>
+        <td class="p-2 border">
+          <img [src]="p.imageUrl" class="w-16 h-16 object-cover rounded" />
+        </td>
+        <td class="p-2 border">
+          <button class="bg-yellow-500 px-2 py-1 text-white rounded"
+                  (click)="editProduct(p)">Edit</button>
+
+          <button class="bg-red-600 px-2 py-1 text-white rounded ml-2"
+                  (click)="deleteProduct(p.productID)">Delete</button>
+        </td>
+      </tr>
+
+    </table>
+  </div>
+
+</div>

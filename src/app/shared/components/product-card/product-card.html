@@ -1,0 +1,13 @@
+<div class="card p-3 rounded shadow-sm">
+  <img
+    [src]="product.imageUrl || 'assets/no-image.png'"
+    alt=""
+    class="w-full h-40 object-cover mb-2"
+  />
+  <h3 class="text-lg font-semibold">{{ product.productName }}</h3>
+  <p class="text-sm text-gray-600">₹{{ product.price }}</p>
+  <div class="mt-2 flex gap-2">
+    <button (click)="addToCart()" class="btn">Add</button>
+    <input type="number" min="1" [(ngModel)]="qty" class="w-20" />
+  </div>
+</div>

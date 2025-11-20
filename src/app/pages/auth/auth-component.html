@@ -1,0 +1,120 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+    
+    <!-- Toggle Buttons -->
+    <div class="flex justify-center mb-6">
+      <button
+        class="px-4 py-2 rounded-l-lg border border-gray-300"
+        [ngClass]="{
+          'bg-blue-600 text-white': isRegister,
+          'bg-white text-gray-700': !isRegister
+        }"
+        (click)="toggleForm()"
+      >
+        Register
+      </button>
+
+      <button
+        class="px-4 py-2 rounded-r-lg border border-gray-300"
+        [ngClass]="{
+          'bg-blue-600 text-white': !isRegister,
+          'bg-white text-gray-700': isRegister
+        }"
+        (click)="toggleForm()"
+      >
+        Login
+      </button>
+    </div>
+
+    <!-- ============================
+         Registration Form
+    ============================= -->
+    <form *ngIf="isRegister" (ngSubmit)="register()">
+      
+      <input
+        type="text"
+        placeholder="Name"
+        [(ngModel)]="regName"
+        name="regName"
+        required
+        class="w-full p-2 mb-3 border rounded"
+      />
+
+      <input
+        type="text"
+        placeholder="Mobile"
+        [(ngModel)]="regMobile"
+        name="regMobile"
+        required
+        class="w-full p-2 mb-3 border rounded"
+      />
+
+      <input
+        type="text"
+        placeholder="Address"
+        [(ngModel)]="regAddress"
+        name="regAddress"
+        required
+        class="w-full p-2 mb-3 border rounded"
+      />
+
+      <input
+        type="password"
+        placeholder="Password"
+        [(ngModel)]="regPassword"
+        name="regPassword"
+        required
+        class="w-full p-2 mb-3 border rounded"
+      />
+
+      <!-- Registration Error -->
+      <p *ngIf="registerError" class="text-red-500 text-sm mb-2">
+        {{ registerError }}
+      </p>
+
+      <button
+        type="submit"
+        class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+      >
+        Register
+      </button>
+    </form>
+
+    <!-- ============================
+         Login Form
+    ============================= -->
+    <form *ngIf="!isRegister" (ngSubmit)="login()">
+
+      <input
+        type="text"
+        placeholder="Mobile"
+        [(ngModel)]="loginMobile"
+        name="loginMobile"
+        required
+        class="w-full p-2 mb-3 border rounded"
+      />
+
+      <input
+        type="password"
+        placeholder="Password"
+        [(ngModel)]="loginPassword"
+        name="loginPassword"
+        required
+        class="w-full p-2 mb-3 border rounded"
+      />
+
+      <!-- Login Error -->
+      <p *ngIf="loginError" class="text-red-500 text-sm mb-2">
+        {{ loginError }}
+      </p>
+
+      <button
+        type="submit"
+        class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+      >
+        Login
+      </button>
+    </form>
+
+  </div>
+</div>

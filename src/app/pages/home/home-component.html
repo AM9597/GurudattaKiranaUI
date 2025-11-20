@@ -1,0 +1,145 @@
+<div class="p-4">
+  <!-- Welcome + Logout Row (Sticky) -->
+  <div class="sticky top-0 bg-white pb-2">
+    <div class="flex items-center justify-between mb-3" *ngIf="customerName">
+      <div class="text-lg font-semibold">👋 Welcome, {{ customerName }}!</div>
+
+      <button
+        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+        (click)="logout()"
+      >
+        Logout
+      </button>
+    </div>
+
+    <!-- Category Tabs (Also Sticky) -->
+    <div class="flex gap-3 overflow-x-auto mb-4">
+      <button
+        *ngFor="let cat of categories"
+        class="px-4 py-2 rounded-full border transition-colors duration-200 whitespace-nowrap"
+        [ngClass]="{
+          'bg-blue-600 text-white': selectedCategory === cat.categoryID,
+          'bg-white text-gray-700 border-gray-300': selectedCategory !== cat.categoryID
+        }"
+        (click)="selectCategory(cat.categoryID)"
+      >
+        {{ cat.categoryName }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+    <div
+      *ngFor="let product of filteredProducts"
+      class="bg-white rounded-xl shadow hover:shadow-lg transition p-4 flex flex-col"
+    >
+      <!-- Product Image -->
+      <img [src]="product.imageUrl" class="w-full h-32 object-cover rounded-lg mb-3" />
+
+      <h3 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base">
+        {{ product.productName }}
+      </h3>
+
+      <p class="text-gray-600 mb-2 text-sm sm:text-base">₹ {{ product.price }}</p>
+
+      <!-- Quantity Controls -->
+      <div
+        *ngIf="getQuantity(product.productID) > 0; else addButton"
+        class="flex items-center gap-3 mt-auto"
+      >
+        <button
+          class="bg-gray-300 px-3 py-1 rounded-lg text-lg font-bold"
+          (click)="decreaseQty(product)"
+        >
+          –
+        </button>
+
+        <span class="font-semibold">
+          {{ getQuantity(product.productID) }}
+        </span>
+
+        <button
+          class="bg-gray-300 px-3 py-1 rounded-lg text-lg font-bold"
+          (click)="increaseQty(product)"
+        >
+          +
+        </button>
+      </div>
+
+      <!-- Add to Cart Button -->
+      <ng-template #addButton>
+        <button
+          class="mt-auto bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition"
+          (click)="addToCart(product)"
+        >
+          Add to Cart
+        </button>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Floating Cart Button -->
+  <button
+    class="fixed bottom-5 right-5 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-2"
+    (click)="toggleCart()"
+  >
+    <span class="material-icons">shopping_cart</span>
+    Cart ({{ cartService.getItems().length }})
+  </button>
+
+  <!-- Page Backdrop (closes cart when clicked) -->
+  <div
+    *ngIf="showCart"
+    class="fixed inset-0 bg-black bg-opacity-40 z-40"
+    (click)="toggleCart()"
+  ></div>
+
+  <!-- Cart Sidebar -->
+  <div
+    *ngIf="showCart"
+    class="fixed top-0 right-0 w-80 h-full bg-white shadow-xl p-4 overflow-y-auto z-50"
+  >
+    <h2 class="text-xl font-semibold mb-4">Your Cart</h2>
+
+    <div *ngIf="cartService.getItems().length === 0" class="text-gray-500">Cart is empty</div>
+
+    <!-- Cart Items -->
+    <div *ngFor="let item of cartService.getItems()" class="flex justify-between items-center mb-4">
+      <div>
+        <p class="font-medium">{{ item.product.productName }}</p>
+        <p class="text-gray-600 text-sm">Qty: {{ item.qty }}</p>
+        <p class="text-gray-800 font-semibold">₹ {{ item.product.price * item.qty }}</p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button
+          class="bg-gray-300 px-3 py-1 rounded-lg text-lg font-bold"
+          (click)="decreaseQty(item.product)"
+        >
+          –
+        </button>
+
+        <span>{{ item.qty }}</span>
+
+        <button
+          class="bg-gray-300 px-3 py-1 rounded-lg text-lg font-bold"
+          (click)="increaseQty(item.product)"
+        >
+          +
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <p class="font-bold text-lg">Total: ₹ {{ cartTotal }}</p>
+
+      <button
+        class="w-full mt-3 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium"
+        (click)="checkout()"
+      >
+        Checkout
+      </button>
+    </div>
+  </div>
+</div>
